@@ -1,0 +1,5 @@
+{
+  "rlywarnlevel" : "NORMAL",
+  "lookandfeeltheme" : "JAVA_SYSTEM",
+  "dialogdefaulttimeoutinms" : 20000
+}

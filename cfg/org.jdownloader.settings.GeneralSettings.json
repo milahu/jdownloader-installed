@@ -1,0 +1,11 @@
+{
+  "preferbouncycastlefortls" : false,
+  "maxdownloadsperhostenabled" : false,
+  "keepxoldlists" : 5,
+  "useavailableaccounts" : true,
+  "dupemanagerenabled" : true,
+  "savelinkgrabberlistenabled" : true,
+  "forcemirrordetectioncaseinsensitive" : true,
+  "downloadspeedlimitrememberedenabled" : true,
+  "downloadspeedlimitenabled" : false
+}

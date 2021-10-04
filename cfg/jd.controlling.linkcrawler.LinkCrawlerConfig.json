@@ -1,0 +1,4 @@
+{
+  "maxthreads" : 12,
+  "threadkeepalive" : 20000
+}
