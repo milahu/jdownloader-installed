@@ -1,0 +1,27 @@
+------------------------Thread: 1:Log.L.log-----------------------
+--ID:1TS:1633373438674-10/4/21, 6:50:38 PM -  [org.appwork.loggingv3.LogV3(info)] -> Application Root: /output/jdownloader-installed/tmp/update/self/JDU
+--ID:1TS:1633373438891-10/4/21, 6:50:38 PM -  [org.appwork.storage.JsonKeyValueStorage(<init>)] -> CFG File does not exist: /output/jdownloader-installed/tmp/update/self/JDU/cfg/org.jdownloader.update.lastchance.LastChanceConfig.json
+--ID:1TS:1633373439456-10/4/21, 6:50:39 PM -  [org.appwork.storage.JsonKeyValueStorage(<init>)] -> CFG File does not exist: /output/jdownloader-installed/tmp/update/self/JDU/cfg/org.jdownloader.updatev2.UpdateSettings.json
+--ID:1TS:1633373439612-10/4/21, 6:50:39 PM -  [org.appwork.storage.JsonKeyValueStorage(<init>)] -> Load JSon Storage from Classpath url: jar:file:/output/jdownloader-installed/tmp/update/self/JDU/JDownloader.jar!/cfg/updateclient/Setup.json
+--ID:1TS:1633373439701-10/4/21, 6:50:39 PM -  [org.appwork.storage.JsonKeyValueStorage(<init>)] -> CFG File does not exist: /output/jdownloader-installed/tmp/update/self/JDU/cfg/updateclient/Setup.json
+--ID:1TS:1633373439706-10/4/21, 6:50:39 PM -  [org.appwork.loggingv3.LogV3(finer)] -> Init StorageHandler for Interface:org.appwork.updatesys.client.Setup|Path:/output/jdownloader-installed/tmp/update/self/JDU/cfg/updateclient/Setup
+------------------------Thread: 18:Log.L.log-----------------------
+--ID:18TS:1633373439833-10/4/21, 6:50:39 PM -  [org.appwork.storage.JsonKeyValueStorage(<init>)] -> Prefer (merged) JSon Storage from File: /output/jdownloader-installed/tmp/update/self/JDU/cfg/org.jdownloader.settings.InternetConnectionSettings.json
+--ID:18TS:1633373439837-10/4/21, 6:50:39 PM -  [org.appwork.loggingv3.LogV3(finer)] -> Init StorageHandler for Interface:org.jdownloader.updatev2.InternetConnectionSettings|Path:/output/jdownloader-installed/tmp/update/self/JDU/cfg/org.jdownloader.settings.InternetConnectionSettings
+--ID:18TS:1633373439925-10/4/21, 6:50:39 PM -  [org.appwork.storage.JsonKeyValueStorage(<init>)] -> Load JSon Storage from Classpath url: jar:file:/output/jdownloader-installed/tmp/update/self/JDU/JDownloader.jar!/cfg/updateclient/HttpSettings.json
+--ID:18TS:1633373439934-10/4/21, 6:50:39 PM -  [org.appwork.storage.JsonKeyValueStorage(<init>)] -> CFG File does not exist: /output/jdownloader-installed/tmp/update/self/JDU/cfg/updateclient/HttpSettings.json
+--ID:18TS:1633373439936-10/4/21, 6:50:39 PM -  [org.appwork.loggingv3.LogV3(finer)] -> Init StorageHandler for Interface:org.appwork.updatesys.client.defaultimpl.http.UpdateHttpClientOptions|Path:/output/jdownloader-installed/tmp/update/self/JDU/cfg/updateclient/HttpSettings
+--ID:18TS:1633373439992-10/4/21, 6:50:39 PM -  [org.appwork.storage.JsonKeyValueStorage(<init>)] -> CFG File does not exist: /output/jdownloader-installed/tmp/update/self/JDU/cfg/ProxySelector.json
+--ID:18TS:1633373439996-10/4/21, 6:50:39 PM -  [org.appwork.loggingv3.LogV3(finer)] -> Init StorageHandler for Interface:org.appwork.updatesys.client.defaultimpl.http.ProxySelectorSettings|Path:/output/jdownloader-installed/tmp/update/self/JDU/cfg/ProxySelector
+--ID:18TS:1633373440165-10/4/21, 6:50:40 PM -  [org.appwork.loggingv3.LogV3(finer)] -> Read Config(URL): jar:file:/output/jdownloader-installed/tmp/update/self/JDU/JDownloader.jar!/cfg/updateclient/Setup.updateservers.json
+--ID:18TS:1633373440181-10/4/21, 6:50:40 PM -  [org.appwork.storage.JsonKeyValueStorage(<init>)] -> CFG File does not exist: /output/jdownloader-installed/tmp/update/self/JDU/update/versioninfo/JD/extensions.json
+--ID:18TS:1633373440183-10/4/21, 6:50:40 PM -  [org.appwork.loggingv3.LogV3(finer)] -> Init StorageHandler for Interface:org.appwork.updatesys.client.extensions.ExtensionsStorage|Path:/output/jdownloader-installed/tmp/update/self/JDU/update/versioninfo/JD/extensions
+--ID:18TS:1633373440220-10/4/21, 6:50:40 PM -  [org.appwork.storage.JsonKeyValueStorage(<init>)] -> CFG File does not exist: /output/jdownloader-installed/tmp/update/self/JDU/cfg/org.appwork.updatesys.client.tracker.TrackConfig.json
+------------------------Thread: 19:Log.L.log-----------------------
+--ID:19TS:1633373440262-10/4/21, 6:50:40 PM -  [org.appwork.storage.JsonKeyValueStorage(<init>)] -> CFG File does not exist: /output/jdownloader-installed/tmp/update/self/JDU/update/versioninfo/JDU/extensions.json
+--ID:19TS:1633373440265-10/4/21, 6:50:40 PM -  [org.appwork.loggingv3.LogV3(finer)] -> Init StorageHandler for Interface:org.appwork.updatesys.client.extensions.ExtensionsStorage|Path:/output/jdownloader-installed/tmp/update/self/JDU/update/versioninfo/JDU/extensions
+------------------------Thread: 20:Log.L.log-----------------------
+--ID:20TS:1633373440474-10/4/21, 6:50:40 PM -  [org.appwork.loggingv3.LogV3(finer)] -> Read Config(File): /output/jdownloader-installed/tmp/update/self/JDU/cfg/org.jdownloader.settings.InternetConnectionSettings.customproxylist.json
+--ID:20TS:1633373440525-10/4/21, 6:50:40 PM -  [org.appwork.loggingv3.LogV3(info)] -> Translation file missing:org/appwork/utils/locale/AWUTranslation.en.lngUse Annotation Dev fallback
+------------------------Thread: 1:Log.L.log-----------------------
+--ID:1TS:1633373445261-10/4/21, 6:50:45 PM -  [org.appwork.loggingv3.LogV3(info)] -> Translation file missing:org/jdownloader/updatev2/UpdaterTranslation.en.lngUse Annotation Dev fallback

@@ -1,0 +1,33 @@
+------------------------Thread: 1:org.jdownloader.update.launcher.SelfTest.log-----------------------
+--ID:1TS:1633373440309-10/4/21, 6:50:40 PM -  [org.jdownloader.update.launcher.SelfTest(copyOptionalLAf)] -> Copy /output/jdownloader-installed/libs/laf/synthetica.jar to /output/jdownloader-installed/tmp/update/self/JDU/libs/laf/synthetica.jar
+--ID:1TS:1633373440311-10/4/21, 6:50:40 PM -  [org.jdownloader.update.launcher.SelfTest(copyOptionalLAf)] -> Could not copy LAF. This is not serious!
+--ID:1TS:1633373440314-10/4/21, 6:50:40 PM -  [org.jdownloader.update.launcher.SelfTest(copyOptionalLAf)] -> Copy /output/jdownloader-installed/libs/laf/syntheticaJDCustom.jar to /output/jdownloader-installed/tmp/update/self/JDU/libs/laf/syntheticaJDCustom.jar
+--ID:1TS:1633373440317-10/4/21, 6:50:40 PM -  [org.jdownloader.update.launcher.SelfTest(copyOptionalLAf)] -> Could not copy LAF. This is not serious!
+--ID:1TS:1633373440320-10/4/21, 6:50:40 PM -  [org.jdownloader.update.launcher.SelfTest(copyOptionalLAf)] -> Copy /output/jdownloader-installed/libs/laf/syntheticaSimple2D.jar to /output/jdownloader-installed/tmp/update/self/JDU/libs/laf/syntheticaSimple2D.jar
+--ID:1TS:1633373440323-10/4/21, 6:50:40 PM -  [org.jdownloader.update.launcher.SelfTest(copyOptionalLAf)] -> Could not copy LAF. This is not serious!
+--ID:1TS:1633373442325-10/4/21, 6:50:42 PM -  [org.jdownloader.update.launcher.SelfTest(onSelfTestOK)] -> Write PollFile: /output/jdownloader-installed/tmp/selftest_1633373436858
+--ID:1TS:1633373445247-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(onSelfTestOK)] -> PollFile Deletion detected: /output/jdownloader-installed/tmp/selftest_1633373436858
+--ID:1TS:1633373445281-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(createBackup)] -> Create backup: /output/jdownloader-installed/JDownloader.jar
+--ID:1TS:1633373445282-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(createBackup)] -> Create backup at: /output/jdownloader-installed/JDownloader.jar.backup.1
+--ID:1TS:1633373445282-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(renameTo)] -> Rename /output/jdownloader-installed/JDownloader.jar to /output/jdownloader-installed/JDownloader.jar.backup.1
+--ID:1TS:1633373445282-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(renameTo)] -> Rename Success: true
+--ID:1TS:1633373445282-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(renameTo)] -> From Exists false (/output/jdownloader-installed/JDownloader.jar)
+--ID:1TS:1633373445282-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(renameTo)] -> To Exists true (/output/jdownloader-installed/JDownloader.jar.backup.1)
+--ID:1TS:1633373445283-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(createBackup)] -> Create backup: /output/jdownloader-installed/update/versioninfo/JDU/rev
+--ID:1TS:1633373445285-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(createBackup)] -> Does not exist: /output/jdownloader-installed/update/versioninfo/JDU/rev
+--ID:1TS:1633373445286-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(onSelfTestOK)] -> Rev Backup: null exists: false( org-> /output/jdownloader-installed/update/versioninfo/JDU/rev
+--ID:1TS:1633373445286-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(onSelfTestOK)] -> Jar Backup: /output/jdownloader-installed/JDownloader.jar.backup.1 exists: true( org-> /output/jdownloader-installed/JDownloader.jar
+--ID:1TS:1633373445286-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(onSelfTestOK)] -> Jar: /output/jdownloader-installed/JDownloader.jar exists: false
+--ID:1TS:1633373445286-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(onSelfTestOK)] -> /output/jdownloader-installed/tmp/update/self/JDU/rev > /output/jdownloader-installed/update/versioninfo/JDU/rev
+--ID:1TS:1633373445296-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(onSelfTestOK)] -> Copy Logs
+--ID:1TS:1633373445299-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(onSelfTestOK)] -> Copy LogFile /output/jdownloader-installed/tmp/update/self/JDU/self_-1_to_15790.log
+--ID:1TS:1633373445299-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(delete)] -> Delete /output/jdownloader-installed/logs/updatehistory/self_-1_to_15790.log
+--ID:1TS:1633373445299-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(delete)] -> Delete OK /output/jdownloader-installed/logs/updatehistory/self_-1_to_15790.log
+--ID:1TS:1633373445300-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(onSelfTestOK)] -> Delete /output/jdownloader-installed/JDownloader.jar
+--ID:1TS:1633373445300-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(delete)] -> Delete /output/jdownloader-installed/JDownloader.jar
+--ID:1TS:1633373445300-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(delete)] -> Delete OK /output/jdownloader-installed/JDownloader.jar
+--ID:1TS:1633373445301-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(onSelfTestOK)] -> Copy /output/jdownloader-installed/tmp/update/self/JDU/JDownloader.jar to /output/jdownloader-installed/JDownloader.jar
+--ID:1TS:1633373445395-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(onSelfTestOK)] -> Finally
+--ID:1TS:1633373445444-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(onSelfTestOK)] -> Jar Hash OK
+--ID:1TS:1633373445445-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(onSelfTestOK)] -> REV Hash OK
+--ID:1TS:1633373445445-10/4/21, 6:50:45 PM -  [org.jdownloader.update.launcher.SelfTest(onSelfTestOK)] -> No Restart
