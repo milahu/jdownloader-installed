@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-Description: Brotli is a generic-purpose lossless compression a
+ lgorithm.
+Bundle-License: http://www.opensource.org/licenses/mit-license.php
+Bundle-SymbolicName: org.brotli.dec
+Archiver-Version: Plexus Archiver
+Built-By: eustas
+Bnd-LastModified: 1494177668482
+Bundle-ManifestVersion: 2
+Bundle-DocURL: http://brotli.org/dec
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.5))"
+Tool: Bnd-3.0.0.201509101326
+Export-Package: org.brotli.dec;version="0.1.2"
+Bundle-Name: org.brotli:dec
+Bundle-Version: 0.1.2
+Created-By: Apache Maven Bundle Plugin
+Build-Jdk: 1.8.0_112
+

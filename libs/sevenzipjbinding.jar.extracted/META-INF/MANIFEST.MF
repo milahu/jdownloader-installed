@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Built-By: Boris Brodski
+Created-By: 1.6.0_33-b03 (Sun Microsystems Inc.)
+Implementation-Title: 7-Zip-JBinding
+Built-Date: 2020-01-23 00:24:00Z
+CMake: 3.6.2
+Implementation-Version: 16.02-2.01
+Implementation-Vendor: sevenzipjbind.sf.net
+
