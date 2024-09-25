@@ -1,4 +1,6 @@
-Manifest-Version: 2.0.235
-Ant-Version: Apache Ant 1.6.5
-Created-By: 1.5.0_06-64 ("Apple Computer, Inc.")
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven
+Built-By: axet
+Build-Jdk: 1.6.0_37
 

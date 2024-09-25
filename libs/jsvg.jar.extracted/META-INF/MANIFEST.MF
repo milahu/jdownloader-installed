@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-License: MIT
+Implementation-Title: jsvg
+Implementation-Version: 1.6.1
+Specification-Vendor: JSVG
+Specification-Version: 1.6.1
+Specification-Title: JSVG
+Implementation-Vendor: JSVG
+Implementation-Vendor-Id: com.github.weisj
+

@@ -1,15 +1,5 @@
-diff --git a/.gitignore b/.gitignore
-new file mode 100644
-index 0000000..ed66187
---- /dev/null
-+++ b/.gitignore
-@@ -0,0 +1,4 @@
-+/lib
-+/build
-+.project
-+.classpath
 diff --git a/src/org/mozilla/javascript/Arguments.java b/src/org/mozilla/javascript/Arguments.java
-index f7027bc..6bd55cf 100644
+index 6da4e35..e58eeb1 100644
 --- a/src/org/mozilla/javascript/Arguments.java
 +++ b/src/org/mozilla/javascript/Arguments.java
 @@ -14,7 +14,7 @@ package org.mozilla.javascript;
@@ -21,7 +11,7 @@ index f7027bc..6bd55cf 100644
  {
      static final long serialVersionUID = 4275508002492040609L;
  
-@@ -47,9 +47,27 @@ final class Arguments extends IdScriptableObject
+@@ -44,9 +44,26 @@ final class Arguments extends IdScriptableObject
          }
      }
  
@@ -35,7 +25,6 @@ index f7027bc..6bd55cf 100644
 +        lengthObj = original.lengthObj;
 +        calleeObj = original.calleeObj;
 +
-+        constructor = original.constructor;
 +        callerObj = original.callerObj;
 +    }
 +    
@@ -49,7 +38,7 @@ index f7027bc..6bd55cf 100644
          return FTAG;
      }
  
-@@ -75,7 +93,7 @@ final class Arguments extends IdScriptableObject
+@@ -72,7 +89,7 @@ final class Arguments extends IdScriptableObject
          putIntoActivation(index, value);
        }
        synchronized (this) {
@@ -58,7 +47,7 @@ index f7027bc..6bd55cf 100644
            args = args.clone();
          }
          args[index] = value;
-@@ -356,6 +374,11 @@ final class Arguments extends IdScriptableObject
+@@ -361,6 +378,11 @@ final class Arguments extends IdScriptableObject
        }
      }
  
@@ -71,74 +60,26 @@ index f7027bc..6bd55cf 100644
  // where NOT_FOUND value tags deleted properties.
  // In addition if callerObj == NULL_VALUE, it tags null for scripts, as
 diff --git a/src/org/mozilla/javascript/BaseFunction.java b/src/org/mozilla/javascript/BaseFunction.java
-index cfc56b9..945c285 100644
+index f08c7b6..221e79a 100644
 --- a/src/org/mozilla/javascript/BaseFunction.java
 +++ b/src/org/mozilla/javascript/BaseFunction.java
-@@ -293,9 +293,6 @@ public class BaseFunction extends IdScriptableObject implements Function
-     private BaseFunction realFunction(Scriptable thisObj, IdFunctionObject f)
-     {
-         Object x = thisObj.getDefaultValue(ScriptRuntime.FunctionClass);
--        if (x instanceof Delegator) {
--            x = ((Delegator)x).getDelegee();
--        }
-         if (x instanceof BaseFunction) {
-             return (BaseFunction)x;
+@@ -419,13 +419,11 @@ public class BaseFunction extends IdScriptableObject implements Function
+         if (!justbody) {
+             sb.append("function ");
+             sb.append(getFunctionName());
+-            sb.append("() {\n\t");
++            sb.append("() {\n    ");
          }
-diff --git a/src/org/mozilla/javascript/ClassCache.java b/src/org/mozilla/javascript/ClassCache.java
-index 09a7ec3..493ab2c 100644
---- a/src/org/mozilla/javascript/ClassCache.java
-+++ b/src/org/mozilla/javascript/ClassCache.java
-@@ -7,7 +7,7 @@
- package org.mozilla.javascript;
- 
- import java.util.Map;
--import java.util.concurrent.ConcurrentHashMap;
-+import java.util.HashMap;
- import java.io.Serializable;
- 
- /**
-@@ -23,9 +23,9 @@ public class ClassCache implements Serializable
-     private static final long serialVersionUID = -8866246036237312215L;
-     private static final Object AKEY = "ClassCache";
-     private volatile boolean cachingIsEnabled = true;
--    private transient Map<Class<?>,JavaMembers> classTable;
--    private transient Map<JavaAdapter.JavaAdapterSignature,Class<?>> classAdapterCache;
--    private transient Map<Class<?>,Object> interfaceAdapterCache;
-+    private transient HashMap<Class<?>,JavaMembers> classTable;
-+    private transient HashMap<JavaAdapter.JavaAdapterSignature,Class<?>> classAdapterCache;
-+    private transient HashMap<Class<?>,Object> interfaceAdapterCache;
-     private int generatedClassSerial;
-     private Scriptable associatedScope;
- 
-@@ -128,9 +128,7 @@ public class ClassCache implements Serializable
-      */
-     Map<Class<?>,JavaMembers> getClassCacheMap() {
-         if (classTable == null) {
--            // Use 1 as concurrency level here and for other concurrent hash maps
--            // as we don't expect high levels of sustained concurrent writes.
--            classTable = new ConcurrentHashMap<Class<?>,JavaMembers>(16, 0.75f, 1);
-+            classTable = new HashMap<Class<?>,JavaMembers>();
+-        sb.append("[native code, arity=");
+-        sb.append(getArity());
+-        sb.append("]\n");
++        sb.append("[native code]\n");
+         if (!justbody) {
+-            sb.append("}\n");
++            sb.append("}");
          }
-         return classTable;
+         return sb.toString();
      }
-@@ -138,7 +136,7 @@ public class ClassCache implements Serializable
-     Map<JavaAdapter.JavaAdapterSignature,Class<?>> getInterfaceAdapterCacheMap()
-     {
-         if (classAdapterCache == null) {
--            classAdapterCache = new ConcurrentHashMap<JavaAdapter.JavaAdapterSignature,Class<?>>(16, 0.75f, 1);
-+            classAdapterCache = new HashMap<JavaAdapter.JavaAdapterSignature,Class<?>>();
-         }
-         return classAdapterCache;
-     }
-@@ -186,7 +184,7 @@ public class ClassCache implements Serializable
-     {
-         if (cachingIsEnabled) {
-             if (interfaceAdapterCache == null) {
--                interfaceAdapterCache = new ConcurrentHashMap<Class<?>,Object>(16, 0.75f, 1);
-+                interfaceAdapterCache = new HashMap<Class<?>,Object>();
-             }
-             interfaceAdapterCache.put(cl, iadapter);
-         }
 diff --git a/src/org/mozilla/javascript/CodeGenerator.java b/src/org/mozilla/javascript/CodeGenerator.java
 index abc2113..55b0f3c 100644
 --- a/src/org/mozilla/javascript/CodeGenerator.java
@@ -160,12 +101,12 @@ index abc2113..55b0f3c 100644
          generateICodeFromTree(theFunction.getLastChild());
      }
 diff --git a/src/org/mozilla/javascript/Context.java b/src/org/mozilla/javascript/Context.java
-index df4c4c0..850f68f 100644
+index a68e204..902b5d8 100644
 --- a/src/org/mozilla/javascript/Context.java
 +++ b/src/org/mozilla/javascript/Context.java
-@@ -283,6 +283,123 @@ public class Context
+@@ -287,6 +287,123 @@ public class Context
       */
-     public static final int FEATURE_ENHANCED_JAVA_ACCESS = 13;
+     public static final int FEATURE_V8_EXTENSIONS = 14;
  
 +    /**
 +     * Special to HtmlUnit's Rhino fork.
@@ -178,7 +119,7 @@ index df4c4c0..850f68f 100644
 +     *
 +     * By default {@link #hasFeature(int)} returns false.
 +     */
-+    public static final int FEATURE_HTMLUNIT_ASK_OBJECT_TO_WRITE_READONLY = 14;
++    public static final int FEATURE_HTMLUNIT_ASK_OBJECT_TO_WRITE_READONLY = 100;
 +
 +    /**
 +     * Special to HtmlUnit's Rhino fork.
@@ -186,7 +127,7 @@ index df4c4c0..850f68f 100644
 +     * (exceptions occurring in host objects).
 +     * By default {@link #hasFeature(int)} returns true.
 +     */
-+    public static final int FEATURE_HTMLUNIT_JS_CATCH_JAVA_EXCEPTION = 15;
++    public static final int FEATURE_HTMLUNIT_JS_CATCH_JAVA_EXCEPTION = 101;
 +
 +    /**
 +     * Special to HtmlUnit's Rhino fork.
@@ -195,7 +136,7 @@ index df4c4c0..850f68f 100644
 +     *
 +     * By default {@link #hasFeature(int)} returns false.
 +     */
-+    public static final int FEATURE_HTMLUNIT_ARGUMENTS_IS_OBJECT = 16;
++    public static final int FEATURE_HTMLUNIT_ARGUMENTS_IS_OBJECT = 102;
 +
 +    /**
 +     * Special to HtmlUnit's Rhino fork.
@@ -208,7 +149,7 @@ index df4c4c0..850f68f 100644
 +     *
 +     * By default {@link #hasFeature(int)} returns false.
 +     */
-+    public static final int FEATURE_HTMLUNIT_FUNCTION_NULL_SETTER = 17;
++    public static final int FEATURE_HTMLUNIT_FUNCTION_NULL_SETTER = 103;
 +
 +    /**
 +     * Special to HtmlUnit's Rhino fork.
@@ -218,7 +159,7 @@ index df4c4c0..850f68f 100644
 +     *
 +     * By default {@link #hasFeature(int)} returns false.
 +     */
-+    public static final int FEATURE_HTMLUNIT_FN_ARGUMENTS_IS_RO_VIEW = 18;
++    public static final int FEATURE_HTMLUNIT_FN_ARGUMENTS_IS_RO_VIEW = 104;
 +
 +    /**
 +     * Special to HtmlUnit's Rhino fork.
@@ -227,7 +168,7 @@ index df4c4c0..850f68f 100644
 +     *
 +     * By default {@link #hasFeature(int)} returns true.
 +     */
-+    public static final int FEATURE_HTMLUNIT_EVAL_LOCAL_SCOPE = 19;
++    public static final int FEATURE_HTMLUNIT_EVAL_LOCAL_SCOPE = 105;
 +
 +    /**
 +     * Special to HtmlUnit's Rhino fork.
@@ -236,7 +177,7 @@ index df4c4c0..850f68f 100644
 +     *
 +     * By default {@link #hasFeature(int)} returns true.
 +     */
-+    public static final int FEATURE_HTMLUNIT_ERROR_STACK = 20;
++    public static final int FEATURE_HTMLUNIT_ERROR_STACK = 106;
 +
 +    /**
 +     * Special to HtmlUnit's Rhino fork.
@@ -245,7 +186,7 @@ index df4c4c0..850f68f 100644
 +     *
 +     * By default {@link #hasFeature(int)} returns true.
 +     */
-+    public static final int FEATURE_HTMLUNIT_CONSTRUCTOR = 21;
++    public static final int FEATURE_HTMLUNIT_CONSTRUCTOR = 107;
 +
 +    /**
 +     * Special to HtmlUnit's Rhino fork.
@@ -255,7 +196,7 @@ index df4c4c0..850f68f 100644
 +     *
 +     * By default {@link #hasFeature(int)} returns false.
 +     */
-+    public static final int FEATURE_HTMLUNIT_FUNCTION_OBJECT_METHOD = 22;
++    public static final int FEATURE_HTMLUNIT_FUNCTION_OBJECT_METHOD = 108;
 +
 +    /**
 +     * Special to HtmlUnit's Rhino fork.
@@ -264,7 +205,7 @@ index df4c4c0..850f68f 100644
 +     *
 +     * By default {@link #hasFeature(int)} returns false.
 +     */
-+    public static final int FEATURE_HTMLUNIT_FUNCTION_DECLARED_FORWARD_IN_BLOCK = 23;
++    public static final int FEATURE_HTMLUNIT_FUNCTION_DECLARED_FORWARD_IN_BLOCK = 109;
 +
 +    /**
 +     * Special to HtmlUnit's Rhino fork.
@@ -273,7 +214,7 @@ index df4c4c0..850f68f 100644
 +     *
 +     * By default {@link #hasFeature(int)} returns true.
 +     */
-+    public static final int FEATURE_HTMLUNIT_PARSE_INT_RADIX_10 = 24;
++    public static final int FEATURE_HTMLUNIT_PARSE_INT_RADIX_10 = 110;
 +
 +    /**
 +     * Special to HtmlUnit's Rhino fork.
@@ -282,12 +223,12 @@ index df4c4c0..850f68f 100644
 +     *
 +     * By default {@link #hasFeature(int)} returns false.
 +     */
-+    public static final int FEATURE_HTMLUNIT_ENUM_NUMBERS_FIRST = 25;
++    public static final int FEATURE_HTMLUNIT_ENUM_NUMBERS_FIRST = 111;
 +
      public static final String languageVersionProperty = "language version";
      public static final String errorReporterProperty   = "error reporter";
  
-@@ -1325,7 +1442,7 @@ public class Context
+@@ -1460,7 +1577,7 @@ public class Context
                               securityDomain);
      }
  
@@ -296,7 +237,7 @@ index df4c4c0..850f68f 100644
                                 Evaluator compiler,
                                 ErrorReporter compilationErrorReporter,
                                 String sourceName, int lineno,
-@@ -1366,7 +1483,7 @@ public class Context
+@@ -1501,7 +1618,7 @@ public class Context
                                 securityDomain);
      }
  
@@ -306,19 +247,19 @@ index df4c4c0..850f68f 100644
                                     ErrorReporter compilationErrorReporter,
                                     String sourceName, int lineno,
 diff --git a/src/org/mozilla/javascript/ContextFactory.java b/src/org/mozilla/javascript/ContextFactory.java
-index 642a3b3..b40d787 100644
+index 555c76b..db87a62 100644
 --- a/src/org/mozilla/javascript/ContextFactory.java
 +++ b/src/org/mozilla/javascript/ContextFactory.java
-@@ -279,6 +279,42 @@ public class ContextFactory
+@@ -282,6 +282,42 @@ public class ContextFactory
  
-           case Context.FEATURE_ENHANCED_JAVA_ACCESS:
-             return false;
-+
-+          case Context.FEATURE_HTMLUNIT_ASK_OBJECT_TO_WRITE_READONLY:
-+            return false;
+           case Context.FEATURE_V8_EXTENSIONS:
+             return true;
 +
 +          case Context.FEATURE_HTMLUNIT_JS_CATCH_JAVA_EXCEPTION:
 +            return true;
++
++          case Context.FEATURE_HTMLUNIT_ASK_OBJECT_TO_WRITE_READONLY:
++            return false;
 +
 +          case Context.FEATURE_HTMLUNIT_ARGUMENTS_IS_OBJECT:
 +            return false;
@@ -352,6 +293,39 @@ index 642a3b3..b40d787 100644
          }
          // It is a bug to call the method with unknown featureIndex
          throw new IllegalArgumentException(String.valueOf(featureIndex));
+@@ -585,4 +621,4 @@ public class ContextFactory
+     {
+         return Context.enter(cx, this);
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/org/mozilla/javascript/Decompiler.java b/src/org/mozilla/javascript/Decompiler.java
+index 49ed40f..8cd849b 100644
+--- a/src/org/mozilla/javascript/Decompiler.java
++++ b/src/org/mozilla/javascript/Decompiler.java
+@@ -309,8 +309,6 @@ public class Decompiler
+         }
+ 
+         if (!toSource) {
+-            // add an initial newline to exactly match js.
+-            result.append('\n');
+             for (int j = 0; j < indent; j++)
+                 result.append(' ');
+         } else {
+@@ -795,11 +793,7 @@ public class Decompiler
+             ++i;
+         }
+ 
+-        if (!toSource) {
+-            // add that trailing newline if it's an outermost function.
+-            if (!justFunctionBody)
+-                result.append('\n');
+-        } else {
++        if (toSource) {
+             if (topFunctionType == FunctionNode.FUNCTION_EXPRESSION) {
+                 result.append(')');
+             }
 diff --git a/src/org/mozilla/javascript/Delegator.java b/src/org/mozilla/javascript/Delegator.java
 index 8e8bac4..e273d0f 100644
 --- a/src/org/mozilla/javascript/Delegator.java
@@ -500,10 +474,10 @@ index 8e8bac4..e273d0f 100644
      }
  }
 diff --git a/src/org/mozilla/javascript/FunctionObject.java b/src/org/mozilla/javascript/FunctionObject.java
-index 376ef0c..600fa98 100644
+index 1d396a6..4df9cc3 100644
 --- a/src/org/mozilla/javascript/FunctionObject.java
 +++ b/src/org/mozilla/javascript/FunctionObject.java
-@@ -397,6 +397,9 @@ public class FunctionObject extends BaseFunction
+@@ -398,6 +398,9 @@ public class FunctionObject extends BaseFunction
          } else {
              if (!isStatic) {
                  Class<?> clazz = member.getDeclaringClass();
@@ -575,6 +549,40 @@ index 81fb8db..ad24816 100644
          // OPT: could optimize to createPropertyGet
          // iff elem is string that can not be number
          Node target = transform(node.getTarget());
+diff --git a/src/org/mozilla/javascript/IdFunctionObject.java b/src/org/mozilla/javascript/IdFunctionObject.java
+index 57f7ef2..de228e1 100644
+--- a/src/org/mozilla/javascript/IdFunctionObject.java
++++ b/src/org/mozilla/javascript/IdFunctionObject.java
+@@ -115,29 +115,6 @@ public class IdFunctionObject extends BaseFunction
+     }
+ 
+     @Override
+-    String decompile(int indent, int flags)
+-    {
+-        StringBuilder sb = new StringBuilder();
+-        boolean justbody = (0 != (flags & Decompiler.ONLY_BODY_FLAG));
+-        if (!justbody) {
+-            sb.append("function ");
+-            sb.append(getFunctionName());
+-            sb.append("() { ");
+-        }
+-        sb.append("[native code for ");
+-        if (idcall instanceof Scriptable) {
+-            Scriptable sobj = (Scriptable)idcall;
+-            sb.append(sobj.getClassName());
+-            sb.append('.');
+-        }
+-        sb.append(getFunctionName());
+-        sb.append(", arity=");
+-        sb.append(getArity());
+-        sb.append(justbody ? "]\n" : "] }\n");
+-        return sb.toString();
+-    }
+-
+-    @Override
+     public int getArity()
+     {
+         return arity;
 diff --git a/src/org/mozilla/javascript/InterpretedFunction.java b/src/org/mozilla/javascript/InterpretedFunction.java
 index 92fb16a..1b161ab 100644
 --- a/src/org/mozilla/javascript/InterpretedFunction.java
@@ -647,10 +655,10 @@ index 92fb16a..1b161ab 100644
  }
  
 diff --git a/src/org/mozilla/javascript/Interpreter.java b/src/org/mozilla/javascript/Interpreter.java
-index 485ae7c..4a9aa37 100644
+index dad9b3b..d58fab2 100644
 --- a/src/org/mozilla/javascript/Interpreter.java
 +++ b/src/org/mozilla/javascript/Interpreter.java
-@@ -2844,6 +2844,17 @@ switch (op) {
+@@ -2865,6 +2865,17 @@ switch (op) {
      private static void enterFrame(Context cx, CallFrame frame, Object[] args,
                                     boolean continuationRestart)
      {
@@ -668,7 +676,7 @@ index 485ae7c..4a9aa37 100644
          boolean usesActivation = frame.idata.itsNeedsActivation;
          boolean isDebugged = frame.debuggerFrame != null;
          if(usesActivation || isDebugged) {
-@@ -2893,6 +2904,9 @@ switch (op) {
+@@ -2914,6 +2925,9 @@ switch (op) {
      private static void exitFrame(Context cx, CallFrame frame,
                                    Object throwable)
      {
@@ -692,10 +700,48 @@ index 657bff4..7c9b5a0 100644
      {
          return topLevel;
 diff --git a/src/org/mozilla/javascript/MemberBox.java b/src/org/mozilla/javascript/MemberBox.java
-index cc1a8cd..dc6a408 100644
+index 52145c0..b6eeb80 100644
 --- a/src/org/mozilla/javascript/MemberBox.java
 +++ b/src/org/mozilla/javascript/MemberBox.java
-@@ -121,6 +121,17 @@ final class MemberBox implements Serializable
+@@ -25,7 +25,37 @@ final class MemberBox implements Serializable
+     transient Class<?>[] argTypes;
+     transient Object delegateTo;
+     transient boolean vararg;
++    transient Function asFunction;
+ 
++    /**
++     * Function returned by calls to __lookupGetter__/__lookupSetter__
++     */
++    Function asFunction(final String name, final Scriptable scope, final Scriptable prototype) {
++    	if (asFunction == null) {
++    		asFunction = new BaseFunction(scope, prototype) {
++    	          @Override
++    	          public Object call(Context cx, Scriptable scope, Scriptable thisObj, Object[] originalArgs) {
++                      MemberBox nativeGetter = MemberBox.this;
++                      Object getterThis;
++                      Object[] args;
++                      if (nativeGetter.delegateTo == null) {
++                          getterThis = thisObj;
++                          args = ScriptRuntime.emptyArgs;
++                      } else {
++                          getterThis = nativeGetter.delegateTo;
++                          args = new Object[] { thisObj };
++                      }
++                      return nativeGetter.invoke(getterThis, args);
++    	          }
++    	          
++    	          @Override
++    	        public String getFunctionName() {
++    	        	return name;
++    	        }
++    		};
++    	}
++    	return asFunction;
++    }
+ 
+     MemberBox(Method method)
+     {
+@@ -121,6 +151,17 @@ final class MemberBox implements Serializable
      Object invoke(Object target, Object[] args)
      {
          Method method = method();
@@ -713,7 +759,7 @@ index cc1a8cd..dc6a408 100644
          try {
              try {
                  return method.invoke(target, args);
-@@ -145,7 +156,22 @@ final class MemberBox implements Serializable
+@@ -145,7 +186,22 @@ final class MemberBox implements Serializable
              } while ((e instanceof InvocationTargetException));
              if (e instanceof ContinuationPending)
                  throw (ContinuationPending) e;
@@ -738,19 +784,19 @@ index cc1a8cd..dc6a408 100644
              throw Context.throwAsScriptRuntimeEx(ex);
          }
 diff --git a/src/org/mozilla/javascript/NativeArray.java b/src/org/mozilla/javascript/NativeArray.java
-index 3431b34..1dd31ee 100644
+index 76e65d3..f4b9b7b 100644
 --- a/src/org/mozilla/javascript/NativeArray.java
 +++ b/src/org/mozilla/javascript/NativeArray.java
-@@ -6,6 +6,8 @@
- 
+@@ -7,6 +7,8 @@
  package org.mozilla.javascript;
  
+ import org.mozilla.javascript.regexp.NativeRegExp;
 +import java.lang.reflect.Field;
 +import java.lang.reflect.Modifier;
+ 
  import java.util.Arrays;
  import java.util.Collection;
- import java.util.Comparator;
-@@ -23,6 +25,24 @@ import java.util.Set;
+@@ -25,6 +27,24 @@ import java.util.Set;
   */
  public class NativeArray extends IdScriptableObject implements List
  {
@@ -775,26 +821,19 @@ index 3431b34..1dd31ee 100644
      static final long serialVersionUID = 7331366857676127338L;
  
      /*
-@@ -1690,7 +1710,6 @@ public class NativeArray extends IdScriptableObject implements List
-         return true;
-     }
- 
--    @Override
-     public int size() {
-         long longLen = length;
-         if (longLen > Integer.MAX_VALUE) {
-@@ -1699,11 +1718,6 @@ public class NativeArray extends IdScriptableObject implements List
-         return (int) longLen;
-     }
- 
--    @Override
--    public boolean isEmpty() {
--        return length == 0;
--    }
--
-     public Object get(long index) {
-         if (index < 0 || index >= length) {
-             throw new IndexOutOfBoundsException();
+diff --git a/src/org/mozilla/javascript/NativeBoolean.java b/src/org/mozilla/javascript/NativeBoolean.java
+index 2ab42ab..d83f792 100644
+--- a/src/org/mozilla/javascript/NativeBoolean.java
++++ b/src/org/mozilla/javascript/NativeBoolean.java
+@@ -74,7 +74,7 @@ final class NativeBoolean extends IdScriptableObject
+             } else {
+                 b = args[0] instanceof ScriptableObject &&
+                         ((ScriptableObject) args[0]).avoidObjectDetection()
+-                    ? true
++                    ? false
+                     : ScriptRuntime.toBoolean(args[0]);
+             }
+             if (thisObj == null) {
 diff --git a/src/org/mozilla/javascript/NativeCall.java b/src/org/mozilla/javascript/NativeCall.java
 index 6094af6..1f18df5 100644
 --- a/src/org/mozilla/javascript/NativeCall.java
@@ -834,31 +873,35 @@ index 6094af6..1f18df5 100644
              }
          }
 diff --git a/src/org/mozilla/javascript/NativeError.java b/src/org/mozilla/javascript/NativeError.java
-index 5053c5d..e48072c 100644
+index 914e518..2066b80 100644
 --- a/src/org/mozilla/javascript/NativeError.java
 +++ b/src/org/mozilla/javascript/NativeError.java
-@@ -110,7 +110,7 @@ final class NativeError extends IdScriptableObject
+@@ -161,7 +161,7 @@ final class NativeError extends IdScriptableObject
          // generated on demand, is cached after the first access, and is
          // overwritable like an ordinary property. Hence this setup with
          // the getter and setter below.
 -        if (stackProvider == null) {
 +        if (stackProvider == null && Context.getContext().hasFeature(Context.FEATURE_HTMLUNIT_ERROR_STACK)) {
              stackProvider = re;
-             try {
-                 defineProperty("stack", null,
-@@ -124,8 +124,10 @@ final class NativeError extends IdScriptableObject
-     }
+             defineProperty("stack", this,
+                            ERROR_DELEGATE_GET_STACK, ERROR_DELEGATE_SET_STACK,
+@@ -192,11 +192,14 @@ final class NativeError extends IdScriptableObject
+         // Determine whether to format the stack trace ourselves, or call the user's code to do it
+         Object value;
+         if (prepare == null) {
++	    	RhinoException.useMozillaStackStyle(true);
+             value = RhinoException.formatStackTrace(stack, stackProvider.details());
++    		RhinoException.useMozillaStackStyle(false);
+         } else {
+             value = callPrepareStack(prepare, stack);
+         }
  
-     public Object getStack() {
-+    	RhinoException.useMozillaStackStyle(true);
-         Object value =  stackProvider == null ?
-                 NOT_FOUND : stackProvider.getScriptStackTrace();
 +    	RhinoException.useMozillaStackStyle(false);
          // We store the stack as local property both to cache it
          // and to make the property writable
-         setStack(value);
+         setStackDelegated(target, value);
 diff --git a/src/org/mozilla/javascript/NativeGlobal.java b/src/org/mozilla/javascript/NativeGlobal.java
-index d21004a..274141e 100644
+index be49562..4338f79 100644
 --- a/src/org/mozilla/javascript/NativeGlobal.java
 +++ b/src/org/mozilla/javascript/NativeGlobal.java
 @@ -9,6 +9,7 @@ package org.mozilla.javascript;
@@ -869,7 +912,7 @@ index d21004a..274141e 100644
  import static org.mozilla.javascript.ScriptableObject.DONTENUM;
  import static org.mozilla.javascript.ScriptableObject.READONLY;
  import static org.mozilla.javascript.ScriptableObject.PERMANENT;
-@@ -256,8 +257,9 @@ public class NativeGlobal implements Serializable, IdFunctionCall
+@@ -249,8 +250,9 @@ public class NativeGlobal implements Serializable, IdFunctionCall
                      radix = 16;
                      start += 2;
                  } else if ('0' <= c && c <= '9') {
@@ -881,46 +924,24 @@ index d21004a..274141e 100644
                  }
              }
          }
-diff --git a/src/org/mozilla/javascript/NativeJavaMethod.java b/src/org/mozilla/javascript/NativeJavaMethod.java
-index c8808c3..6b1296b 100644
---- a/src/org/mozilla/javascript/NativeJavaMethod.java
-+++ b/src/org/mozilla/javascript/NativeJavaMethod.java
-@@ -8,7 +8,7 @@ package org.mozilla.javascript;
+diff --git a/src/org/mozilla/javascript/NativeObject.java b/src/org/mozilla/javascript/NativeObject.java
+index 7db56f5..7d54d91 100644
+--- a/src/org/mozilla/javascript/NativeObject.java
++++ b/src/org/mozilla/javascript/NativeObject.java
+@@ -258,8 +258,12 @@ public class NativeObject extends IdScriptableObject implements Map
+                       else
+                           break;
+                   }
+-                  if (gs != null)
++                  if (gs != null) {
++                	  if (gs instanceof MemberBox) {
++                		  gs = ((MemberBox) gs).asFunction(name, f.getParentScope(), f.getPrototype());
++                	  }
+                       return gs;
++                  }
+               }
+               return Undefined.instance;
  
- import java.lang.reflect.*;
- import java.util.Arrays;
--import java.util.concurrent.CopyOnWriteArrayList;
-+import java.util.LinkedList;
- 
- /**
-  * This class reflects Java methods into the JavaScript environment and
-@@ -257,7 +257,7 @@ public class NativeJavaMethod extends BaseFunction
-                     }
-                 }
-             } else {
--                overloadCache = new CopyOnWriteArrayList<ResolvedOverload>();
-+                overloadCache = new LinkedList<ResolvedOverload>();
-             }
-             int index = findFunction(cx, methods, args);
-             // As a sanity measure, don't let the lookup cache grow longer
-@@ -266,7 +266,7 @@ public class NativeJavaMethod extends BaseFunction
-                 synchronized (overloadCache) {
-                     ResolvedOverload ovl = new ResolvedOverload(args, index);
-                     if (!overloadCache.contains(ovl)) {
--                        overloadCache.add(0, ovl);
-+                        overloadCache.addFirst(ovl);
-                     }
-                 }
-             }
-@@ -557,7 +557,7 @@ public class NativeJavaMethod extends BaseFunction
- 
-     MemberBox[] methods;
-     private String functionName;
--    private transient CopyOnWriteArrayList<ResolvedOverload> overloadCache;
-+    private transient LinkedList<ResolvedOverload> overloadCache;
- }
- 
- class ResolvedOverload {
 diff --git a/src/org/mozilla/javascript/NodeTransformer.java b/src/org/mozilla/javascript/NodeTransformer.java
 index 6e0a5cd..28064c5 100644
 --- a/src/org/mozilla/javascript/NodeTransformer.java
@@ -981,10 +1002,10 @@ index 6e0a5cd..28064c5 100644
        siblingLoop:
          for (;;) {
 diff --git a/src/org/mozilla/javascript/Parser.java b/src/org/mozilla/javascript/Parser.java
-index 7762d30..d5de488 100644
+index 49c7e68..73bfc55 100644
 --- a/src/org/mozilla/javascript/Parser.java
 +++ b/src/org/mozilla/javascript/Parser.java
-@@ -533,6 +533,17 @@ public class Parser
+@@ -566,6 +566,17 @@ public class Parser
                          n = function(calledByCompileFunction
                                       ? FunctionNode.FUNCTION_EXPRESSION
                                       : FunctionNode.FUNCTION_STATEMENT);
@@ -1002,7 +1023,7 @@ index 7762d30..d5de488 100644
                      } catch (ParserException e) {
                          break;
                      }
-@@ -752,12 +763,19 @@ public class Parser
+@@ -785,12 +796,19 @@ public class Parser
                  }
              }
              if (!matchToken(Token.LP)) {
@@ -1028,10 +1049,10 @@ index 7762d30..d5de488 100644
          } else if (matchToken(Token.LP)) {
              // Anonymous function:  leave name as null
 diff --git a/src/org/mozilla/javascript/ScriptRuntime.java b/src/org/mozilla/javascript/ScriptRuntime.java
-index e380adc..33b2748 100644
+index ab8c006..0b70e74 100644
 --- a/src/org/mozilla/javascript/ScriptRuntime.java
 +++ b/src/org/mozilla/javascript/ScriptRuntime.java
-@@ -7,15 +7,20 @@
+@@ -7,16 +7,21 @@
  package org.mozilla.javascript;
  
  import java.io.Serializable;
@@ -1047,6 +1068,7 @@ index e380adc..33b2748 100644
 +import java.util.TreeSet;
  
  import org.mozilla.javascript.ast.FunctionNode;
+ import org.mozilla.javascript.v8dtoa.DoubleConversion;
  import org.mozilla.javascript.v8dtoa.FastDtoa;
 -import org.mozilla.javascript.xml.XMLObject;
  import org.mozilla.javascript.xml.XMLLib;
@@ -1054,9 +1076,9 @@ index e380adc..33b2748 100644
  
  /**
   * This is the class that implements the runtime.
-@@ -955,7 +960,10 @@ public class ScriptRuntime {
+@@ -1018,7 +1023,10 @@ public class ScriptRuntime {
      public static Scriptable toObjectOrNull(Context cx, Object obj,
-                                             final Scriptable scope)
+                                             Scriptable scope)
      {
 -        if (obj instanceof Scriptable) {
 +    	if (obj instanceof Delegator) {
@@ -1066,7 +1088,7 @@ index e380adc..33b2748 100644
              return (Scriptable)obj;
          } else if (obj != null && obj != Undefined.instance) {
              return toObject(cx, scope, obj);
-@@ -2152,6 +2160,24 @@ public class ScriptRuntime {
+@@ -2289,6 +2297,24 @@ public class ScriptRuntime {
                  x.used.intern(previous[i]);
              }
          }
@@ -1091,7 +1113,7 @@ index e380adc..33b2748 100644
          x.ids = ids;
          x.index = 0;
      }
-@@ -2167,6 +2193,9 @@ public class ScriptRuntime {
+@@ -2304,6 +2330,9 @@ public class ScriptRuntime {
                                                    Context cx,
                                                    Scriptable scope)
      {
@@ -1101,9 +1123,9 @@ index e380adc..33b2748 100644
          Scriptable parent = scope.getParentScope();
          if (parent == null) {
              Object result = topScopeName(cx, scope, name);
-@@ -2246,6 +2275,9 @@ public class ScriptRuntime {
+@@ -2401,6 +2430,9 @@ public class ScriptRuntime {
                                                    String property,
-                                                   Context cx, final Scriptable scope)
+                                                   Context cx, Scriptable scope)
      {
 +        if ("eval".equals(property)) {
 +            lastEvalTopCalled_ = false;
@@ -1111,7 +1133,7 @@ index e380adc..33b2748 100644
          Scriptable thisObj = toObjectOrNull(cx, obj, scope);
          return getPropFunctionAndThisHelper(obj, property, cx, thisObj);
      }
-@@ -2348,6 +2380,18 @@ public class ScriptRuntime {
+@@ -2503,6 +2535,18 @@ public class ScriptRuntime {
          return function.construct(cx, scope, args);
      }
  
@@ -1130,7 +1152,7 @@ index e380adc..33b2748 100644
      public static Object callSpecial(Context cx, Callable fun,
                                       Scriptable thisObj,
                                       Object[] args, Scriptable scope,
-@@ -2356,6 +2400,12 @@ public class ScriptRuntime {
+@@ -2511,6 +2555,12 @@ public class ScriptRuntime {
      {
          if (callType == Node.SPECIALCALL_EVAL) {
              if (thisObj.getParentScope() == null && NativeGlobal.isEvalFunction(fun)) {
@@ -1143,7 +1165,16 @@ index e380adc..33b2748 100644
                  return evalSpecial(cx, scope, callerThis, args,
                                     filename, lineNumber);
              }
-@@ -2518,6 +2568,8 @@ public class ScriptRuntime {
+@@ -2588,7 +2638,7 @@ public class ScriptRuntime {
+     {
+         if (arg1 == null || arg1 == Undefined.instance) {
+             return ScriptRuntime.emptyArgs;
+-        } else if (arg1 instanceof NativeArray || arg1 instanceof Arguments) {
++        } else if (arg1 instanceof Scriptable) {
+             return cx.getElements((Scriptable) arg1);
+         } else {
+             throw ScriptRuntime.typeError0("msg.arg.isnt.array");
+@@ -2673,6 +2723,8 @@ public class ScriptRuntime {
              return "undefined";
          if (value instanceof ScriptableObject)
          	return ((ScriptableObject) value).getTypeOf();
@@ -1152,7 +1183,7 @@ index e380adc..33b2748 100644
          if (value instanceof Scriptable)
              return (value instanceof Callable) ? "function" : "object";
          if (value instanceof CharSequence)
-@@ -2526,6 +2578,10 @@ public class ScriptRuntime {
+@@ -2681,6 +2733,10 @@ public class ScriptRuntime {
              return "number";
          if (value instanceof Boolean)
              return "boolean";
@@ -1163,7 +1194,7 @@ index e380adc..33b2748 100644
          throw errorWithClassName("msg.invalid.type", value);
      }
  
-@@ -2931,6 +2987,15 @@ public class ScriptRuntime {
+@@ -3121,6 +3177,15 @@ public class ScriptRuntime {
              if (x instanceof Wrapper && y instanceof Wrapper) {
                  return ((Wrapper)x).unwrap() == ((Wrapper)y).unwrap();
              }
@@ -1179,7 +1210,7 @@ index e380adc..33b2748 100644
          } else {
              warnAboutNonJSObject(x);
              return x == y;
-@@ -3160,13 +3225,27 @@ public class ScriptRuntime {
+@@ -3350,13 +3415,27 @@ public class ScriptRuntime {
                  // Don't overwrite existing def if already defined in object
                  // or prototypes of object.
                  if (!ScriptableObject.hasProperty(scope, name)) {
@@ -1200,6 +1231,57 @@ index e380adc..33b2748 100644
 +                                for (int f = 0; f < idata.getFunctionCount(); f++) {
 +                                    if (name.equals(idata.getFunction(f).getFunctionName())) {
 +                                        define = false;
+warning: refname 'HEAD' is ambiguous.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/Arguments.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/BaseFunction.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/CodeGenerator.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/ContextFactory.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/Decompiler.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/Delegator.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/FunctionObject.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/IRFactory.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/IdFunctionObject.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/InterpretedFunction.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/Interpreter.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/InterpreterData.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/MemberBox.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/NativeArray.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/NativeBoolean.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/NativeCall.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/NativeError.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/NativeGlobal.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/NativeObject.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/NodeTransformer.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/Parser.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/ScriptRuntime.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/ScriptableObject.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/ast/FunctionNode.java.
+The file will have its original line endings in your working directory.
+warning: LF will be replaced by CRLF in src/org/mozilla/javascript/resources/Messages.properties.
+The file will have its original line endings in your working directory.
 +                                        break;
 +                                    }
 +                                }
@@ -1213,11 +1295,40 @@ index e380adc..33b2748 100644
                      } else {
                          varScope.put(name, varScope, Undefined.instance);
                      }
+@@ -3988,20 +4067,24 @@ public class ScriptRuntime {
+ 
+     public static RuntimeException undefReadError(Object object, Object id)
+     {
+-        return typeError2("msg.undef.prop.read", toString(object), toString(id));
++        final String idStr = toString(id);
++        return typeError2("msg.undef.prop.read", toString(object), idStr);
+     }
+ 
+     public static RuntimeException undefCallError(Object object, Object id)
+     {
+-        return typeError2("msg.undef.method.call", toString(object), toString(id));
++        final String idStr = toString(id);
++        return typeError2("msg.undef.method.call", toString(object), idStr);
+     }
+ 
+     public static RuntimeException undefWriteError(Object object,
+                                                    Object id,
+                                                    Object value)
+     {
+-        return typeError3("msg.undef.prop.write", toString(object), toString(id),
+-                          toString(value));
++        final String idStr = toString(id);
++        final String valueStr = toString(value);
++        return typeError3("msg.undef.prop.write", toString(object), idStr,
++                          valueStr);
+     }
+ 
+     private static RuntimeException undefDeleteError(Object object, Object id)
 diff --git a/src/org/mozilla/javascript/ScriptableObject.java b/src/org/mozilla/javascript/ScriptableObject.java
-index 0ab2a98..bc4ed38 100644
+index 5696295..5218a68 100644
 --- a/src/org/mozilla/javascript/ScriptableObject.java
 +++ b/src/org/mozilla/javascript/ScriptableObject.java
-@@ -241,11 +241,28 @@ public abstract class ScriptableObject implements Scriptable, Serializable,
+@@ -254,11 +254,30 @@ public abstract class ScriptableObject implements Scriptable, Serializable,
                      if (Context.getContext().hasFeature(Context.FEATURE_STRICT_MODE)) {
                          // Based on TC39 ES3.1 Draft of 9-Feb-2009, 8.12.4, step 2,
                          // we should throw a TypeError in this case.
@@ -1237,7 +1348,9 @@ index 0ab2a98..bc4ed38 100644
 +                                return true;
 +                            }
 +                        }
-+                        getter = null;
++                        if (owner == start) {
++                            getter = null;
++                        }
 +                    }
 +                    else {
 +                        // Based on TC39 ES3.1 Draft of 9-Feb-2009, 8.12.4, step 2,
@@ -1250,7 +1363,7 @@ index 0ab2a98..bc4ed38 100644
                  }
              } else {
                  Context cx = Context.getContext();
-@@ -2178,6 +2195,10 @@ public abstract class ScriptableObject implements Scriptable, Serializable,
+@@ -2263,6 +2282,10 @@ public abstract class ScriptableObject implements Scriptable, Serializable,
       */
      public static Object getProperty(Scriptable obj, String name)
      {
@@ -1261,7 +1374,7 @@ index 0ab2a98..bc4ed38 100644
          Scriptable start = obj;
          Object result;
          do {
-@@ -3104,4 +3125,20 @@ public abstract class ScriptableObject implements Scriptable, Serializable,
+@@ -3207,4 +3230,20 @@ public abstract class ScriptableObject implements Scriptable, Serializable,
          }
      }
  
@@ -1283,7 +1396,7 @@ index 0ab2a98..bc4ed38 100644
 +    }
  }
 diff --git a/src/org/mozilla/javascript/ast/FunctionNode.java b/src/org/mozilla/javascript/ast/FunctionNode.java
-index 9589259..58b7875 100644
+index c96a175..315b0f1 100644
 --- a/src/org/mozilla/javascript/ast/FunctionNode.java
 +++ b/src/org/mozilla/javascript/ast/FunctionNode.java
 @@ -270,7 +270,7 @@ public class FunctionNode extends ScriptNode {
@@ -1295,21 +1408,8 @@ index 9589259..58b7875 100644
      }
  
      public void setRequiresActivation() {
-diff --git a/src/org/mozilla/javascript/regexp/NativeRegExp.java b/src/org/mozilla/javascript/regexp/NativeRegExp.java
-index 0122541..bcd438c 100644
---- a/src/org/mozilla/javascript/regexp/NativeRegExp.java
-+++ b/src/org/mozilla/javascript/regexp/NativeRegExp.java
-@@ -183,7 +183,7 @@ public class NativeRegExp extends IdScriptableObject implements Function
-             this.lastIndex = thatObj.lastIndex;
-             return this;
-         }
--        String s = args.length == 0 ? "" : escapeRegExp(args[0]);
-+        String s = args.length == 0 || args[0] instanceof Undefined ? "" : escapeRegExp(args[0]);
-         String global = args.length > 1 && args[1] != Undefined.instance
-             ? ScriptRuntime.toString(args[1])
-             : null;
 diff --git a/src/org/mozilla/javascript/resources/Messages.properties b/src/org/mozilla/javascript/resources/Messages.properties
-index 35e4e52..c03915c 100644
+index 6e6d3ed..9943d49 100644
 --- a/src/org/mozilla/javascript/resources/Messages.properties
 +++ b/src/org/mozilla/javascript/resources/Messages.properties
 @@ -536,7 +536,7 @@ msg.prop.not.found =\
@@ -1321,11 +1421,18 @@ index 35e4e52..c03915c 100644
  
  msg.invalid.type =\
      Invalid JavaScript value of type {0}
+@@ -842,4 +842,4 @@ msg.called.null.or.undefined=\
+   {0}.prototype.{1} method called on null or undefined
+ 
+ msg.first.arg.not.regexp=\
+-  First argument to {0}.prototype.{1} must not be a regular expression
+\ No newline at end of file
++  First argument to {0}.prototype.{1} must not be a regular expression
 diff --git a/toolsrc/org/mozilla/javascript/tools/debugger/SwingGui.java b/toolsrc/org/mozilla/javascript/tools/debugger/SwingGui.java
-index 7ed9f2d..f71e664 100644
+index a0328d1..9fcc1bd 100644
 --- a/toolsrc/org/mozilla/javascript/tools/debugger/SwingGui.java
 +++ b/toolsrc/org/mozilla/javascript/tools/debugger/SwingGui.java
-@@ -42,6 +42,7 @@ import java.util.EventObject;
+@@ -41,6 +41,7 @@ import java.util.EventObject;
  import java.util.Map;
  import java.util.HashMap;
  import java.util.Properties;
@@ -1333,7 +1440,7 @@ index 7ed9f2d..f71e664 100644
  import java.io.*;
  import javax.swing.tree.DefaultTreeCellRenderer;
  import javax.swing.tree.TreePath;
-@@ -123,7 +124,7 @@ public class SwingGui extends JFrame implements GuiCallback {
+@@ -122,7 +123,7 @@ public class SwingGui extends JFrame implements GuiCallback {
       * Hash table of script URLs to their internal frames.
       */
      private final Map<String,FileWindow> fileWindows =
@@ -1342,7 +1449,7 @@ index 7ed9f2d..f71e664 100644
  
  
      /**
-@@ -450,7 +451,19 @@ public class SwingGui extends JFrame implements GuiCallback {
+@@ -449,7 +450,19 @@ public class SwingGui extends JFrame implements GuiCallback {
       * @param lineNumber the line number to select, or -1
       */
      protected void showFileWindow(String sourceUrl, int lineNumber) {
@@ -1363,7 +1470,7 @@ index 7ed9f2d..f71e664 100644
          if (w == null) {
              Dim.SourceInfo si = dim.sourceInfo(sourceUrl);
              createFileWindow(si, -1);
-@@ -459,6 +472,9 @@ public class SwingGui extends JFrame implements GuiCallback {
+@@ -458,6 +471,9 @@ public class SwingGui extends JFrame implements GuiCallback {
          if (lineNumber > -1) {
              int start = w.getPosition(lineNumber-1);
              int end = w.getPosition(lineNumber)-1;
@@ -1373,7 +1480,7 @@ index 7ed9f2d..f71e664 100644
              w.textArea.select(start);
              w.textArea.setCaretPosition(start);
              w.textArea.moveCaretPosition(end);
-@@ -861,6 +877,26 @@ public class SwingGui extends JFrame implements GuiCallback {
+@@ -860,6 +876,26 @@ public class SwingGui extends JFrame implements GuiCallback {
              FindFunction dlg = new FindFunction(this, "Go to function",
                                                  "Function");
              dlg.showDialog(this);
@@ -1400,7 +1507,7 @@ index 7ed9f2d..f71e664 100644
          } else if (cmd.equals("Tile")) {
              JInternalFrame[] frames = desk.getAllFrames();
              int count = frames.length;
-@@ -3220,8 +3256,9 @@ class Menubar extends JMenuBar implements ActionListener {
+@@ -3219,8 +3255,9 @@ class Menubar extends JMenuBar implements ActionListener {
                                    KeyEvent.VK_N,
                                    0,
                                    KeyEvent.VK_Q};
@@ -1412,7 +1519,7 @@ index 7ed9f2d..f71e664 100644
          String[] debugItems = {"Break", "Go", "Step Into", "Step Over", "Step Out"};
          char[] debugShortCuts = {'B', 'G', 'I', 'O', 'T'};
          String[] plafItems = {"Metal", "Windows", "Motif"};
-@@ -3263,6 +3300,10 @@ class Menubar extends JMenuBar implements ActionListener {
+@@ -3262,6 +3299,10 @@ class Menubar extends JMenuBar implements ActionListener {
                                             editShortCuts[i]);
              item.addActionListener(this);
              editMenu.add(item);
@@ -1423,54 +1530,5 @@ index 7ed9f2d..f71e664 100644
          }
          for (int i = 0; i < plafItems.length; ++i) {
              JMenuItem item = new JMenuItem(plafItems[i],
-warning: refname 'HEAD' is ambiguous.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/Arguments.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/BaseFunction.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/ClassCache.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/CodeGenerator.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/Context.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/ContextFactory.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/Delegator.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/FunctionObject.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/IRFactory.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/InterpretedFunction.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/Interpreter.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/InterpreterData.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/MemberBox.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/NativeArray.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/NativeCall.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/NativeError.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/NativeGlobal.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/NativeJavaMethod.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/NodeTransformer.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/Parser.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/ScriptRuntime.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/ScriptableObject.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/ast/FunctionNode.java.
-The file will have its original line endings in your working directory.
-warning: LF will be replaced by CRLF in src/org/mozilla/javascript/resources/Messages.properties.
-The file will have its original line endings in your working directory.
 warning: LF will be replaced by CRLF in toolsrc/org/mozilla/javascript/tools/debugger/SwingGui.java.
 The file will have its original line endings in your working directory.

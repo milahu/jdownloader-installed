@@ -24,12 +24,10 @@ libs/dbus/unix.jar
 libs/htmlunit-core-js.jar
 libs/image4j.jar
 libs/irclib.jar
-libs/jackson-annotations.jar
-libs/jackson-core.jar
-libs/jackson-databind.jar
 libs/jna.jar
 libs/jna_platform.jar
 libs/js.jar
+libs/jsvg.jar
 libs/jsyntaxpane.jar
 libs/jxbrowser/jxbrowser.jar
 libs/jxbrowser/license.jar
@@ -44,6 +42,7 @@ libs/laf/syntheticaBlueLight.jar
 libs/laf/syntheticaBlueMoon.jar
 libs/laf/syntheticaBlueSteel.jar
 libs/laf/syntheticaClassy.jar
+libs/laf/syntheticaDark.jar
 libs/laf/syntheticaGreenDream.jar
 libs/laf/syntheticaJDCustom.jar
 libs/laf/syntheticaJDPlain.jar
@@ -54,7 +53,6 @@ libs/laf/syntheticaSilverMoon.jar
 libs/laf/syntheticaSimple2D.jar
 libs/laf/syntheticaSkyMetallic.jar
 libs/laf/syntheticaWhiteVision.jar
-libs/proxyVole.jar
 libs/sequence-library.jar
 libs/sevenzipjbinding.jar
 libs/sevenzipjbindingBsd.jar
@@ -64,6 +62,7 @@ libs/sevenzipjbindingLinuxArmVersion.jar
 libs/sevenzipjbindingLinuxPPCVersion.jar
 libs/sevenzipjbindingMac.jar
 libs/sevenzipjbindingWin.jar
+libs/sevenzipjbindingWinArm64.jar
 libs/sqljet.jar
 libs/svgSalamander.jar
 libs/svnkit.jar
