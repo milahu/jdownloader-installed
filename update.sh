@@ -2,10 +2,14 @@
 
 # update jdownloader installation
 
-# license: MIT License
+# FIXME "existing jD instance found!"
+# FIXME "org.appwork.utils.singleapp.AnotherInstanceRunningException: JD2 is already running!"
 
-set -eu
+set -e
+set -u
 #set -x # debug
+
+script_dir="$(dirname "$0")"
 
 dst="$PWD"
 
@@ -17,7 +21,7 @@ if ! [ -e "$jar" ]; then
 fi
 
 remove_old=true
-remove_old=false
+remove_old=false # TODO remove
 
 if [ -n "$(git status --porcelain)" ]; then
   echo "error: git repo is dirty. todo:"
@@ -28,6 +32,7 @@ fi
 rev1=0
 if [ -e build.json ]; then
   rev1=$(cat build.json | jq .JDownloaderRevision)
+  v1=$(date -d"$(jq -r .buildDate <build.json)" +"%Y.%m.%d")
 fi
 
 if $remove_old; then
@@ -36,15 +41,21 @@ if $remove_old; then
 
   git rm -rf . || true
 
-  rm -rf JDownloader.jar Core.jar logs/ cfg/ JD2.lock JDownloader.pid update/ translations/ themes/ tmp/ licenses/ libs/ license_german.txt jd/ build.json extensions/ license.txt
+  rm -rf JDownloader.jar Core.jar logs/ cfg/ JD2.lock JDownloader.pid update/ translations/ themes/ tmp/ licenses/ libs/ license_german.txt build.json extensions/ license.txt
 
   mv JDownloader.jar.bak JDownloader.jar
 
 fi
 
+# java, jar
 jre=$(nix-build --no-out-link '<nixpkgs>' -A jre)
 
+# bwrap
 bubblewrap=$(nix-build --no-out-link '<nixpkgs>' -A bubblewrap)
+
+# repack jar files
+echo "repacking jar files"
+"$script_dir/repack-jars.sh"
 
 a=($bubblewrap/bin/bwrap)
 
@@ -105,7 +116,7 @@ while $keep_running; do
   # FIXME handle run 1 versus run 2
   # normally this happens only on run 2
   for ((step=1;;step++)); do
-    sleep 1
+    sleep 2
     # also copy history (scrollback buffer)
     #screen -S $screen_id -X hardcopy -h $hardcopy_path
 
@@ -130,31 +141,62 @@ while $keep_running; do
     echo "last 10 lines of console output:"
     tail -n10 $hardcopy_path | grep -n .
   done
-  rm $hardcopy_path
+  rm $hardcopy_path || true
 done
 
-rm -rf jd/ tmp/ logs/ JD2.lock JDownloader.pid cfg/downloadList*.zip cfg/linkcollector*.zip
+rev2=$(cat build.json | jq .JDownloaderRevision)
+v2=$(date -d"$(jq -r .buildDate <build.json)" +"%Y.%m.%d")
+
+# different versions can have the same revision
+#if [ "$rev1" = "$rev2" ]; then
+if [ "$v1" = "$v2" ]; then
+  echo "already up to date at version $v2"
+  exit
+fi
+
+
+
+# extract and remove jar files
+# jar files create diff noise
+# so we store only the contents of the jar files
+
+# extract jar files
+echo "extracting jar files"
+"$script_dir/extract-jars.sh"
+
+# remove jar files
+find . -name '*.jar' |
+while read jar; do
+  git rm "$jar" || rm "$jar"
+done
+
+# remove garbage files
+rm -rf tmp/ logs/ JD2.lock JDownloader.pid cfg/downloadList*.zip cfg/linkcollector*.zip
 
 git add .
 
-rev2=$(cat build.json | jq .JDownloaderRevision)
+# add new top-level dirs
+find . -name '*.jar.extracted' -not -path '*.jar.extracted/*' |
+while read dir; do
+  git add "$dir"
+done
 
-if [ "$rev1" = "$rev2" ]; then
-  echo "already up to date at rev $rev1"
-else
+echo "committing update from version $v1 to $v2"
 
-  echo "committing update from rev $rev1 to $rev2"
+m="$(
+  echo "up to v$v2 rev$rev2"
+  # we could store the checksums of the original jar files
+  # but these are mostly useless
+  # because we cannot reproduce the original jar archive from unpacked java files
+  # https://old.reddit.com/r/AskReverseEngineering/comments/1ahd36y/reverse_engineer_the_exact_lowlevel_compression/
+  #echo
+  #echo '$ sha256sum *.jar'
+  #sha256sum *.jar
+)"
 
-  m="$(
-    echo "up to rev$rev2"
-    echo
-    echo '$ sha256sum *.jar'
-    sha256sum *.jar
-  )"
+buildDate="$(cat build.json | jq -r .buildDate)"
+if [ -z "$buildDate" ]; then buildDate="$(date -R)"; fi
 
-  buildDate="$(cat build.json | jq -r .buildDate)"
-  if [ -z "$buildDate" ]; then buildDate="$(date -R)"; fi
+git commit -m "$m" --date="$buildDate"
 
-  git commit -m "$m" --date="$buildDate"
-
-fi
+git tag "v$v2"
