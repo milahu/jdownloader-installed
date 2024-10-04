@@ -7,4 +7,5 @@ Specification-Version: 1.6.1
 Specification-Title: JSVG
 Implementation-Vendor: JSVG
 Implementation-Vendor-Id: com.github.weisj
+Created-By: 21.0.3 (N/A)
 

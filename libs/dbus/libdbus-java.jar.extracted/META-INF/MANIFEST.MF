@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Class-Path: /usr/local/share/java/unix.jar /usr/local/share/java/hexdu
- mp.jar /usr/local/share/java/debug-disable.jar
+Class-Path: /usr/local/share/java/unix.jar /usr/local/share/java/hexdump
+ .jar /usr/local/share/java/debug-disable.jar
 Created-By: 1.6.0_20 (Sun Microsystems Inc.)
 

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
-Bundle-Description: Brotli is a generic-purpose lossless compression a
- lgorithm.
+Bundle-Description: Brotli is a generic-purpose lossless compression alg
+ orithm.
 Bundle-License: http://www.opensource.org/licenses/mit-license.php
 Bundle-SymbolicName: org.brotli.dec
 Archiver-Version: Plexus Archiver

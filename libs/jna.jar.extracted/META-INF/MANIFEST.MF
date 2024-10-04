@@ -17,47 +17,46 @@ Bundle-Version: 5.13.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: JNA Development Team
 Bundle-ActivationPolicy: lazy
-Export-Package:  com.sun.jna;version="5.13.0", com.sun.jna.ptr;version
- ="5.13.0";uses:="com.sun.jna", com.sun.jna.win32;version="5.13.0";use
- s:="com.sun.jna" 
-Bundle-NativeCode:  com/sun/jna/win32-x86/jnidispatch.dll; processor=x
- 86;osname=win32, com/sun/jna/win32-x86-64/jnidispatch.dll; processor=
- x86-64;osname=win32, com/sun/jna/win32-aarch64/jnidispatch.dll; proce
- ssor=aarch64;osname=win32, com/sun/jna/win32-x86/jnidispatch.dll; pro
- cessor=x86;osname=win, com/sun/jna/win32-x86-64/jnidispatch.dll; proc
- essor=x86-64;osname=win, com/sun/jna/win32-aarch64/jnidispatch.dll; p
- rocessor=aarch64;osname=win, com/sun/jna/w32ce-arm/jnidispatch.dll; p
- rocessor=arm;osname=wince,  com/sun/jna/sunos-x86/libjnidispatch.so; 
- processor=x86;osname=sunos, com/sun/jna/sunos-x86-64/libjnidispatch.s
- o; processor=x86-64;osname=sunos, com/sun/jna/sunos-sparc/libjnidispa
- tch.so; processor=sparc;osname=sunos, com/sun/jna/sunos-sparcv9/libjn
- idispatch.so; processor=sparcv9;osname=sunos,  com/sun/jna/aix-ppc/li
- bjnidispatch.a; processor=ppc;osname=aix, com/sun/jna/aix-ppc64/libjn
- idispatch.a; processor=ppc64;osname=aix,  com/sun/jna/linux-ppc/libjn
- idispatch.so; processor=ppc;osname=linux, com/sun/jna/linux-ppc64/lib
- jnidispatch.so; processor=ppc64;osname=linux, com/sun/jna/linux-ppc64
- le/libjnidispatch.so; processor=ppc64le;osname=linux, com/sun/jna/lin
- ux-x86/libjnidispatch.so; processor=x86;osname=linux, com/sun/jna/lin
- ux-x86-64/libjnidispatch.so; processor=x86-64;osname=linux, com/sun/j
- na/linux-arm/libjnidispatch.so; processor=arm;osname=linux, com/sun/j
- na/linux-arm/libjnidispatch.so; processor=arm_le;osname=linux, com/su
- n/jna/linux-armel/libjnidispatch.so; processor=armel;osname=linux, co
- m/sun/jna/linux-aarch64/libjnidispatch.so; processor=aarch64;osname=l
- inux, com/sun/jna/linux-ia64/libjnidispatch.so; processor=ia64;osname
- =linux, com/sun/jna/linux-sparcv9/libjnidispatch.so; processor=sparcv
- 9;osname=linux, com/sun/jna/linux-mips64el/libjnidispatch.so; process
- or=mips64el;osname=linux, com/sun/jna/linux-s390x/libjnidispatch.so; 
- processor=S390x;osname=linux, com/sun/jna/linux-loongarch64/libjnidis
- patch.so; processor=loongarch64;osname=linux,  com/sun/jna/freebsd-x8
- 6/libjnidispatch.so; processor=x86;osname=freebsd, com/sun/jna/freebs
- d-x86-64/libjnidispatch.so; processor=x86-64;osname=freebsd,  com/sun
- /jna/openbsd-x86/libjnidispatch.so; processor=x86;osname=openbsd, com
- /sun/jna/openbsd-x86-64/libjnidispatch.so; processor=x86-64;osname=op
- enbsd,  com/sun/jna/darwin-ppc/libjnidispatch.jnilib; osname=macosx;p
- rocessor=ppc, com/sun/jna/darwin-ppc64/libjnidispatch.jnilib; osname=
- macosx;processor=ppc64, com/sun/jna/darwin-x86/libjnidispatch.jnilib;
-  osname=macosx;processor=x86, com/sun/jna/darwin-x86-64/libjnidispatc
- h.jnilib; osname=macosx;processor=x86-64, com/sun/jna/darwin-aarch64/
- libjnidispatch.jnilib; osname=macosx;processor=aarch64 
+Export-Package:  com.sun.jna;version="5.13.0", com.sun.jna.ptr;version="
+ 5.13.0";uses:="com.sun.jna", com.sun.jna.win32;version="5.13.0";uses:="
+ com.sun.jna" 
+Bundle-NativeCode:  com/sun/jna/win32-x86/jnidispatch.dll; processor=x86
+ ;osname=win32, com/sun/jna/win32-x86-64/jnidispatch.dll; processor=x86-
+ 64;osname=win32, com/sun/jna/win32-aarch64/jnidispatch.dll; processor=a
+ arch64;osname=win32, com/sun/jna/win32-x86/jnidispatch.dll; processor=x
+ 86;osname=win, com/sun/jna/win32-x86-64/jnidispatch.dll; processor=x86-
+ 64;osname=win, com/sun/jna/win32-aarch64/jnidispatch.dll; processor=aar
+ ch64;osname=win, com/sun/jna/w32ce-arm/jnidispatch.dll; processor=arm;o
+ sname=wince,  com/sun/jna/sunos-x86/libjnidispatch.so; processor=x86;os
+ name=sunos, com/sun/jna/sunos-x86-64/libjnidispatch.so; processor=x86-6
+ 4;osname=sunos, com/sun/jna/sunos-sparc/libjnidispatch.so; processor=sp
+ arc;osname=sunos, com/sun/jna/sunos-sparcv9/libjnidispatch.so; processo
+ r=sparcv9;osname=sunos,  com/sun/jna/aix-ppc/libjnidispatch.a; processo
+ r=ppc;osname=aix, com/sun/jna/aix-ppc64/libjnidispatch.a; processor=ppc
+ 64;osname=aix,  com/sun/jna/linux-ppc/libjnidispatch.so; processor=ppc;
+ osname=linux, com/sun/jna/linux-ppc64/libjnidispatch.so; processor=ppc6
+ 4;osname=linux, com/sun/jna/linux-ppc64le/libjnidispatch.so; processor=
+ ppc64le;osname=linux, com/sun/jna/linux-x86/libjnidispatch.so; processo
+ r=x86;osname=linux, com/sun/jna/linux-x86-64/libjnidispatch.so; process
+ or=x86-64;osname=linux, com/sun/jna/linux-arm/libjnidispatch.so; proces
+ sor=arm;osname=linux, com/sun/jna/linux-arm/libjnidispatch.so; processo
+ r=arm_le;osname=linux, com/sun/jna/linux-armel/libjnidispatch.so; proce
+ ssor=armel;osname=linux, com/sun/jna/linux-aarch64/libjnidispatch.so; p
+ rocessor=aarch64;osname=linux, com/sun/jna/linux-ia64/libjnidispatch.so
+ ; processor=ia64;osname=linux, com/sun/jna/linux-sparcv9/libjnidispatch
+ .so; processor=sparcv9;osname=linux, com/sun/jna/linux-mips64el/libjnid
+ ispatch.so; processor=mips64el;osname=linux, com/sun/jna/linux-s390x/li
+ bjnidispatch.so; processor=S390x;osname=linux, com/sun/jna/linux-loonga
+ rch64/libjnidispatch.so; processor=loongarch64;osname=linux,  com/sun/j
+ na/freebsd-x86/libjnidispatch.so; processor=x86;osname=freebsd, com/sun
+ /jna/freebsd-x86-64/libjnidispatch.so; processor=x86-64;osname=freebsd,
+   com/sun/jna/openbsd-x86/libjnidispatch.so; processor=x86;osname=openb
+ sd, com/sun/jna/openbsd-x86-64/libjnidispatch.so; processor=x86-64;osna
+ me=openbsd,  com/sun/jna/darwin-ppc/libjnidispatch.jnilib; osname=macos
+ x;processor=ppc, com/sun/jna/darwin-ppc64/libjnidispatch.jnilib; osname
+ =macosx;processor=ppc64, com/sun/jna/darwin-x86/libjnidispatch.jnilib; 
+ osname=macosx;processor=x86, com/sun/jna/darwin-x86-64/libjnidispatch.j
+ nilib; osname=macosx;processor=x86-64, com/sun/jna/darwin-aarch64/libjn
+ idispatch.jnilib; osname=macosx;processor=aarch64 
 Automatic-Module-Name: com.sun.jna
 
