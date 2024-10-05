@@ -15,11 +15,6 @@ dst="$PWD"
 
 jar="$dst/JDownloader.jar"
 
-if ! [ -e "$jar" ]; then
-  echo "error: no such file: $jar"
-  exit 1
-fi
-
 remove_old=true
 remove_old=false # TODO remove
 
@@ -37,13 +32,9 @@ fi
 
 if $remove_old; then
 
-  ln -f JDownloader.jar JDownloader.jar.bak
-
   git rm -rf . || true
 
-  rm -rf JDownloader.jar Core.jar logs/ cfg/ JD2.lock JDownloader.pid update/ translations/ themes/ tmp/ licenses/ libs/ license_german.txt build.json extensions/ license.txt
-
-  mv JDownloader.jar.bak JDownloader.jar
+  rm -rf logs/ cfg/ JD2.lock JDownloader.pid update/ translations/ themes/ tmp/ licenses/ libs/ license_german.txt build.json extensions/ license.txt
 
 fi
 
