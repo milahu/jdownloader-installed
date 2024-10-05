@@ -40,15 +40,17 @@ fi
 
 # java, jar
 jre=$(nix-build --no-out-link '<nixpkgs>' -A jre)
+export PATH="$jre/bin:$PATH"
 
 # bwrap
 bubblewrap=$(nix-build --no-out-link '<nixpkgs>' -A bubblewrap)
+export PATH="$bubblewrap/bin:$PATH"
 
 # repack jar files
 echo "repacking jar files"
 "$script_dir/repack-jars.sh"
 
-a=($bubblewrap/bin/bwrap)
+a=(bwrap)
 
 # FIXME add only required /nix/store paths
 a+=(--ro-bind /nix /nix)
@@ -67,7 +69,7 @@ a+=(--bind "$dst" "$dst") # give access to JDownloader.jar etc
 a+=(--bind "$HOME/Downloads/jdownloader" "/output") # give access to JDownloader.jar etc
 #a+=()
 
-a+=($jre/bin/java)
+a+=(java)
 
 # see also
 # https://aur.archlinux.org/cgit/aur.git/tree/JDownloaderHeadless?h=jdownloader2

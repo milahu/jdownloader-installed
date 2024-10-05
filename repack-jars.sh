@@ -6,8 +6,8 @@ set -e
 set -u
 
 # check dependencies
-command -v find
-command -v jar
+find --version
+jar --version
 
 # walk down: get the maximum depth
 for ((level=0;;level++)); do
